@@ -72,6 +72,7 @@ def main():
         key="problem_difficulty_select"
     )
 
+
     if problem_type != st.session_state.problem_type:
         generate_new_question(problem_type,difficulty)
 
@@ -79,18 +80,19 @@ def main():
         st.write(st.session_state.current_question)
         
         unit = "N" if problem_type == "Calculate Force" else "m/s²"
-        user_input = st.number_input(
+        user_input1 = st.number_input(
             f"Your Answer ({unit}):",
             value=None,
             step=None,  # Remove step to allow any decimal input
             format="%f",  # Use %f to allow flexible decimal places
-            key=f"user_input_{st.session_state.question_id}"  # Unique key for each question
+            key=f"user_input1_{st.session_state.question_id}"  # Unique key for each question
         )
+       
 
         if st.button("Submit"):
             st.session_state.submitted = True
-            if user_input is not None:
-                st.session_state.user_answer = user_input
+            if user_input1 is not None:
+                st.session_state.user_answer = user_input1
                 correct_answer = st.session_state.correct_answer
                 tolerance = correct_answer * 0.05  # 5% tolerance
 
