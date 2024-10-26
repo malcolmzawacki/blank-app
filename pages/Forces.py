@@ -1,9 +1,16 @@
 import streamlit as st
-
+from modules.navbar import navbar
 import random
 
 st.set_page_config(page_title="Forces")
 st.sidebar.header("Forces")
+
+def main():
+    navbar()
+    st.title(f'Forces')
+
+if __name__ == '__main__':
+    main()
 
 def generate_force_question():
     mass = random.randint(1, 10)  # kg

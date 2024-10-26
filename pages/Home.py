@@ -11,4 +11,9 @@ st.write("""
 Select a problem type from the sidebar to begin practicing.
 """)
 
-navbar()
+def main():
+    navbar()
+    st.title(f'Home')
+
+if __name__ == '__main__':
+    main()
