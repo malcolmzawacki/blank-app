@@ -34,7 +34,7 @@ def m_n_array(max):
 
 def numbers(difficulty): #reformat for new variables
     m_n_list = m_n_array(challenge(difficulty))
-    rowChoice = random.randint(0,len(m_n_list))
+    rowChoice = random.randint(0,len(m_n_list)-1)
     m = m_n_list[rowChoice][0]
     n = m_n_list[rowChoice][1]
 
