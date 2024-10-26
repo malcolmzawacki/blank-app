@@ -1,18 +1,30 @@
 import streamlit as st
 import random
 
+def challenge(difficulty):
+    if difficulty == "Easy":
+        range = 10
+    elif difficulty == "Medium":
+        range = 50
+    elif difficulty == "Hard":
+        range = 250
+    else:
+        range = 20
+    return range
 
-def generate_force_question():
-    mass = random.randint(1, 10)  # kg
-    acceleration = random.randint(1, 10)  # m/s²
+def numbers(range):
+    mass = random.randint(1, range)  # kg
+    acceleration = random.randint(1, range)  # m/s²
     force = mass * acceleration
+    return mass, acceleration, force
+
+def generate_force_question(difficulty):
+    mass, acceleration, force = numbers(challenge(difficulty))
     question = f"If a mass of {mass:.2f} kg is accelerated at {acceleration:.2f} m/s², what is the force applied? (N)"
     return question, force
 
-def generate_acceleration_question():
-    force = random.randint(10, 100)  # N
-    mass = random.randint(1, 10)  # kg
-    acceleration = force / mass
+def generate_acceleration_question(difficulty):
+    mass, acceleration, force = numbers(challenge(difficulty))
     question = f"If a force of {force:.2f} N is applied to a mass of {mass:.2f} kg, what is the acceleration? (m/s²)"
     return question, acceleration
 
@@ -29,13 +41,16 @@ def initialize_session_state():
         st.session_state.submitted = False
     if 'question_id' not in st.session_state:
         st.session_state.question_id = 0
+    if 'difficulty' not in st.session_state:
+        st.session_state.difficulty = None
 
-def generate_new_question(problem_type):
+def generate_new_question(problem_type,difficulty):
     if problem_type == "Calculate Force":
-        st.session_state.current_question, st.session_state.correct_answer = generate_force_question()
+        st.session_state.current_question, st.session_state.correct_answer = generate_force_question(difficulty)
     elif problem_type == "Calculate Acceleration":
-        st.session_state.current_question, st.session_state.correct_answer = generate_acceleration_question()
+        st.session_state.current_question, st.session_state.correct_answer = generate_acceleration_question(difficulty)
     st.session_state.problem_type = problem_type
+    st.session_state.difficulty = difficulty
     st.session_state.user_answer = None
     st.session_state.submitted = False
     st.session_state.question_id += 1  # Increment question ID for new input field key
@@ -51,8 +66,14 @@ def main():
         key="problem_type_select"
     )
 
+    difficulty = st.selectbox(
+        "Select Difficulty",
+        ("Easy", "Medium","Hard"),
+        key="problem_difficulty_select"
+    )
+
     if problem_type != st.session_state.problem_type:
-        generate_new_question(problem_type)
+        generate_new_question(problem_type,difficulty)
 
     if st.session_state.current_question:
         st.write(st.session_state.current_question)
@@ -81,7 +102,7 @@ def main():
                 st.error("Please enter an answer before submitting.")
         
         if st.button("New Question"):
-            generate_new_question(problem_type)
+            generate_new_question(problem_type,difficulty)
             st.rerun()
 
     # Reset submitted flag if problem type changes
